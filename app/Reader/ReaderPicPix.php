@@ -1,5 +1,6 @@
 <?php
 require_once 'pixpic.class.php';
+require_once 'Colors.php';
 require_once 'Tools.php';
 
 class PixReader extends Pixpic {
@@ -8,12 +9,9 @@ class PixReader extends Pixpic {
 
     public function Clustering()
     {
-        $count_clusters=0;
-        $labels=[];
-        $equals=[];
+        $count_clusters=0;$labels=[];$equals=[];
         for ($y = 0; $y < imagesy($this->rs)-1; $y++){
             for ($x = 0; $x < imagesx($this->rs)-1; $x++) {
-
                 if ($x>0 && $y>0)
                 {
                     $current    = ["x"=>$x, "y"=>$y, "h"=>$this->hexPixel($x,$y)]; #center
@@ -21,31 +19,19 @@ class PixReader extends Pixpic {
                     $right      = ["x"=>$x+1, "y"=>$y, "h"=>$this->hexPixel($x+1,$y)]; #right
                     $bottom     = ["x"=>$x, "y"=>$y+1, "h"=>$this->hexPixel($x,$y+1)]; #bottom
                     $left       = ["x"=>$x-1, "y"=>$y, "h"=>$this->hexPixel($x-1,$y)]; #left
-
                     if ($current['h'] != '000000') {
-
                         if ($top['h']==='000000' && $left['h'] === '000000') {
-
                             $count_clusters+=1;
                             array_push($labels,  ['x'=>$x,'y'=>$y,'c'=>$count_clusters]);
-                        
                         }else{
-
                             if ($left['h'] === 'ffffff' && $top['h'] != 'ffffff') {
-
                                 array_push($labels, ['x'=>$x,'y'=>$y,'c'=>$this->find($left,$labels)]);
-
                             }elseif ($top['h'] === 'ffffff' && $left['h'] != 'ffffff') {
-
                                 array_push($labels, ['x'=>$x,'y'=>$y,'c'=>$this->find($top,$labels)]);
-
                             }elseif($top['h'] === 'ffffff' && $left['h'] === 'ffffff') {
-
                                 if($this->find($top,$labels) !== $this->find($left,$labels)){
-
-                                    array_push($equals, ['x'=>$x,'y'=>$y,'c'=>$this->union2($left,$top,$labels),'ct'=>$this->find($top,$labels),'cl'=>$this->find($left,$labels)]);
-                                
-                                    array_push($labels, ['x'=>$x,'y'=>$y,'c'=>$this->union2($left,$top,$labels)]);
+                                    array_push($equals, ['x'=>$x,'y'=>$y,'c'=>$this->union($left,$top,$labels),'ct'=>$this->find($top,$labels),'cl'=>$this->find($left,$labels)]);
+                                    array_push($labels, ['x'=>$x,'y'=>$y,'c'=>$this->union($left,$top,$labels)]);
                                 }else{
                                     array_push($labels, ['x'=>$x,'y'=>$y,'c'=>$this->find($left,$labels)]);
                                 }
@@ -58,19 +44,15 @@ class PixReader extends Pixpic {
 
         for ($i=0; $i < sizeof($labels); $i++) {
             foreach ($equals as $equal) {
-
-                if ($labels[$i]['c'] === $equal['ct']) {
-
-                    $labels[$i]['c']=$equal['c'];
-                
-                }elseif ($labels[$i]['c'] === $equal['cl']) {
-                    
-                    $labels[$i]['c']=$equal['c'];
-
+                if ($labels[$i]['c'] !== $equal['c']) {
+                    if ($labels[$i]['c'] === $equal['ct']) {
+                        $labels[$i]['c']=$equal['c'];
+                    }elseif ($labels[$i]['c'] === $equal['cl']) {
+                        $labels[$i]['c']=$equal['c'];
+                    }
                 }
             }
         }
-
         $this->paintClusters($labels);
     }
 
@@ -83,44 +65,18 @@ class PixReader extends Pixpic {
         }
     }
 
-    public function union2($left,$top,$labels)
-    {
-        $cLeft=0;$cTop=0;$clLeft=0;$clTop=0;
-
-        foreach ($labels as $label) {
-
-            if ($label['x'] == $left['x'] && $label['y'] == $left['y']) {
-                $clLeft = $this->find($left,$labels);
-            }
-            if ($label['x'] == $top['x'] && $label['y'] == $top['y']) {
-                $clTop  = $this->find($top,$labels);
-            }
-        }
-
-        return min($clLeft,$clTop);
-    }
-
     public function union($left,$top,$labels)
     {
         $cLeft=0;$cTop=0;$clLeft=0;$clTop=0;
-
         foreach ($labels as $label) {
-
             if ($label['x'] == $left['x'] && $label['y'] == $left['y']) {
-                $cLeft +=1;
                 $clLeft = $this->find($left,$labels);
             }
             if ($label['x'] == $top['x'] && $label['y'] == $top['y']) {
-                $cTop  +=1;
                 $clTop  = $this->find($top,$labels);
             }
         }
-        
-        if ($cTop > $cLeft) {
-            return $clTop;
-        }else{
-            return $clLeft;
-        }
+        return min($clLeft,$clTop);
     }
 
     public function showClusters($labels)
@@ -185,5 +141,4 @@ class PixReader extends Pixpic {
             }
         }
     }
-
 }
