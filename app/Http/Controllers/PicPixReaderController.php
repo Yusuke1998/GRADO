@@ -60,6 +60,9 @@ class PicPixReaderController extends Controller
     		case 'clustery':
     			$px->Clustering();
     			break;
+            case 'spaceline':
+                $px->lineSpace();
+                break;
     		case 'squelet':
     			$px->squelettisation();
     			break;

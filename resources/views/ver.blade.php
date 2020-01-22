@@ -10,8 +10,9 @@
 			<img width="300" height="300" src="{{url()}}/imgOrigi/{{ $img->name }}" alt="">
 		</div>
 		<div class="card-footer">
-			<a class="btn btn-sm btn-info" href="{{ url('modify',[$img->id,'grayscale']) }}" title="Escala de Grises">Gris</a>
+			<a class="btn btn-sm btn-info" href="{{ url('modify',[$img->id,'spaceline']) }}" title="Separar Linea">Separar Linea</a>
 			<a class="btn btn-sm btn-info" href="{{ url('modify',[$img->id,'clustery']) }}" title="Segmentar imagen">Segmentar</a>
+			<a class="btn btn-sm btn-info" href="{{ url('modify',[$img->id,'grayscale']) }}" title="Escala de Grises">Gris</a>
 			<a class="btn btn-sm btn-info" href="{{ url('modify',[$img->id,'squelet']) }}" title="Esqueleto">Esqueleto</a>
 			<a class="btn btn-sm btn-info" href="{{ url('modify',[$img->id,'backgroundBlack']) }}" title="Fondo Negro">Fondo Negro</a>
 			<a class="btn btn-sm btn-info" href="{{ url('modify',[$img->id,'backgroundWhite']) }}" title="Fondo Blanco">Fondo Blanco</a>

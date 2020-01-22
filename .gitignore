@@ -1,5 +1,5 @@
-/public/imgModif
-/public/imgOrigi
+/public/imgModif/*
+/public/imgOrigi/*
 /vendor
 /.idea
 Homestead.json
