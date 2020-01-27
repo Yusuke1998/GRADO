@@ -93,4 +93,11 @@ class PicPixReaderController extends Controller
     	$img->delete();
 	    return redirect(url('/'));
     }
+
+    // api-vue
+
+    public function showAll()
+    {
+        return ['Hola Mundo ShowAll'=>'#'];
+    }
 }

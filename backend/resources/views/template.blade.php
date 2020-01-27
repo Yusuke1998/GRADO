@@ -9,7 +9,7 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12 my-5">
+			<div class="col-md-12 my-3">
 				<h1 class="text-center">PicPixReader</h1>
 			</div>
 			@yield('content')
