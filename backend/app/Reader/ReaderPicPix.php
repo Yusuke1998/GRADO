@@ -98,7 +98,7 @@ class PixReader extends Pixpic {
         }
         $candidatos_of=[];
         $cLine = 0;
-        #prueba para encontrar candidatos
+        #busqueda de posibles lineas candidatas
         for ($y = 0; $y < imagesy($this->rs)-1; $y++){
             for ($x = 0; $x < imagesx($this->rs)-1; $x++) {
                 if ($x>0 && $y>=$okLines[0]['y'])
@@ -109,6 +109,7 @@ class PixReader extends Pixpic {
                     $bottom     = ["x"=>$x, "y"=>$y+1, "h"=>$this->hexPixel($x,$y+1)]; #bottom
                     $left       = ["x"=>$x-1, "y"=>$y, "h"=>$this->hexPixel($x-1,$y)]; #left
                     if ($current['h'] === 'ffffff') {
+
                         if ($left['h'] === '000000')
                         {
                             $cLine+=1;
@@ -129,6 +130,7 @@ class PixReader extends Pixpic {
                 }
             }
         }
+        // se determinan los candidatos verdaderos
         for ($i=0; $i < sizeof($candidatos); $i++)
         {
             for ($j=0; $j < sizeof($candidatos_of); $j++)
@@ -138,6 +140,7 @@ class PixReader extends Pixpic {
                 }
             }
         }
+        // se obtienen las lineas validas, mayores a un 80% del ancho de la imagen
         $okLines=[];
         for ($k=0; $k < sizeof($candidatos); $k++)
         {
@@ -146,14 +149,18 @@ class PixReader extends Pixpic {
                 array_push($okLines,$candidatos[$k]);
             }
         }
-        #se elmina la primera y la ultima linea de pixeles identificada
-        $firstLine  = 0;
-        $lastLine   = sizeof($okLines)-1;
-        for ($m=0; $m < $okLines[$firstLine]['c']; $m++) { 
-            imagesetpixel($this->rs,$okLines[$firstLine]['x']+$m,$okLines[$firstLine]['y'],black);
-        }
-        for ($m=0; $m < $okLines[$lastLine]['c']; $m++) { 
-            imagesetpixel($this->rs,$okLines[$lastLine]['x']+$m,$okLines[$lastLine]['y'],black);
+        // se agrupan las lineas
+        $okLines = $this->groupConsecutiveNumbers($okLines);
+        for ($l=0; $l < sizeof($okLines); $l++) { 
+            #se elmina la primera y la ultima linea de pixeles identificada
+            $firstLine  = 0;
+            $lastLine   = sizeof($okLines[$l])-1;
+            for ($m=0; $m < $okLines[$l][$firstLine]['c']; $m++) { 
+                imagesetpixel($this->rs,$okLines[$l][$firstLine]['x']+$m,$okLines[$l][$firstLine]['y'],black);
+            }
+            for ($m=0; $m < $okLines[$l][$lastLine]['c']; $m++) { 
+                imagesetpixel($this->rs,$okLines[$l][$lastLine]['x']+$m,$okLines[$l][$lastLine]['y'],black);
+            }
         }
     }
 
@@ -206,6 +213,24 @@ class PixReader extends Pixpic {
         $this->paintClusters($labels);
     }
 
+    public function groupConsecutiveNumbers(array $input): array{
+        // se agrupan los numeros consecutivos, es decir los valores de y, si son consecutivos es una misma linea
+        $result = [];
+        $previous = array_shift($input);
+        $currentGroup = [$previous];
+        foreach ($input as $current) {
+            if($current['l'] == $previous['l']+1)
+                $currentGroup[] = $current;
+            else{
+                $result[] = $currentGroup;
+                $currentGroup = [$current];
+            }
+            $previous = $current;
+        }
+        $result[] = $currentGroup;
+        return $result;
+    }
+
     public function searchY($labels,$current)
     {
         foreach ($labels as $key => $label) {
@@ -255,8 +280,6 @@ class PixReader extends Pixpic {
             echo "x-".$label['x']." y-".$label['y']." c-".$label['c']."<br>";
         }
     }
-
-    // crear un arreglo dinamico, si la etiqueta no extiste en el arreglo entonces lo agrego al arreglo con un color random, todo mediante iteraciones.
     
     public function labelColor($labels,$c)
     {
