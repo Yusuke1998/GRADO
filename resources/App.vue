@@ -53,7 +53,7 @@
       drawer: null,
     }),
     created () {
-      this.$vuetify.theme.blue = true
+      this.$vuetify.theme.dark = false
     }
   }
 </script>

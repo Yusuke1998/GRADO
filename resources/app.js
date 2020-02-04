@@ -14,6 +14,7 @@ window.Vue = require('vue');
 
 // DECLARANDO COMPONENTES
 Vue.component('picpixreader', require('./components/PicPixReader.vue').default);
+Vue.component('images-all', require('./components/ImagesAll.vue').default);
 // FIN COMPONENTES
 
 /* PLUGINS */

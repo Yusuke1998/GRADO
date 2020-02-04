@@ -1,10 +1,11 @@
 <template>
 	<div>
+		<!-- carga -->
 		<v-layout>
-			<v-flex xs8>
+			<v-flex xs12>
 				<v-card 
-					class="mx-auto"
-					:loading="true"
+					class="mx-auto mt-5"
+					:loading="false"
 					:shaped="true">
 					<v-card-title>
 						<p class="text-center">Hola 1</p>
@@ -21,6 +22,13 @@
 						proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 					</v-card-text>
 				</v-card>
+			</v-flex>
+		</v-layout>
+
+		<!-- imagenes -->
+		<v-layout>
+			<v-flex xs12>
+				<images-all></images-all>
 			</v-flex>
 		</v-layout>
 	</div>

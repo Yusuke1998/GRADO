@@ -1,18 +1,12 @@
 <template>
-	<div>
-		<v-layout>
-			<v-flex xs12>
-				<images-all></images-all>
-			</v-flex>
-		</v-layout>
+	<div class="my-12 text-center">
+		<h4>Todas las Imagenes</h4>
 	</div>
 </template>
 
 <script>
 
 export default {
-	name:'images',
-
 	mounted()
 	{
 
