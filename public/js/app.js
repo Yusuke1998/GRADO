@@ -2070,6 +2070,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
   data: function data() {
@@ -2114,7 +2147,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -38379,18 +38411,86 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "div",
+    { staticClass: "my-12" },
+    [
+      _c(
+        "v-container",
+        [
+          _c(
+            "v-layout",
+            [
+              _c("v-flex", { attrs: { xs12: "" } }, [
+                _c("h4", { staticClass: "text-center" }, [
+                  _vm._v("Todas las Imagenes")
+                ])
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-layout",
+            [
+              _c(
+                "v-flex",
+                { attrs: { xs12: "" } },
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        {
+                          attrs: {
+                            "align-content-xs": "center",
+                            "no-gutters": ""
+                          }
+                        },
+                        _vm._l(12, function(n) {
+                          return _c(
+                            "v-col",
+                            { key: n, attrs: { cols: "12", sm: "4" } },
+                            [
+                              _c(
+                                "v-card",
+                                {
+                                  staticClass: "pa-2 ma-2",
+                                  attrs: { outlined: "", tile: "" }
+                                },
+                                [
+                                  _c("v-card-title", [
+                                    _c("p", [_vm._v("Imagen " + _vm._s(n))])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("v-card-text", [_c("v-img")], 1)
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        }),
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "my-12 text-center" }, [
-      _c("h4", [_vm._v("Todas las Imagenes")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -38453,21 +38553,25 @@ var render = function() {
                   attrs: { loading: false, shaped: true }
                 },
                 [
-                  _c("v-card-title", [
-                    _c("p", { staticClass: "text-center" }, [_vm._v("Hola 1")])
-                  ]),
-                  _vm._v(" "),
-                  _c("v-card-subtitle", [
-                    _vm._v(
-                      "\n\t\t\t\t\taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n\t\t\t\t"
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("v-card-text", [
-                    _vm._v(
-                      "\n\t\t\t\t\tLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n\t\t\t\t\ttempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\n\t\t\t\t\tquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\n\t\t\t\t\tconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\n\t\t\t\t\tcillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\n\t\t\t\t\tproident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\t\t\t\t"
-                    )
-                  ])
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("v-file-input", {
+                        attrs: {
+                          dense: true,
+                          color: "secondary accent-4",
+                          counter: "",
+                          label: "Carga de Imagen",
+                          multiple: "",
+                          placeholder: "Seleccion una imagen valida",
+                          "prepend-icon": "mdi-paperclip",
+                          outlined: "",
+                          loading: true
+                        }
+                      })
+                    ],
+                    1
+                  )
                 ],
                 1
               )

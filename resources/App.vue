@@ -6,7 +6,7 @@
       clipped
     >
       <v-list dense>
-        <v-list-item link  :to="{ name: 'home' }">
+        <v-list-item link :to="{ name: 'home' }">
           <v-list-item-action>
             <v-icon>mdi-view-dashboard</v-icon>
           </v-list-item-action>
@@ -14,7 +14,7 @@
             <v-list-item-title>Inicio</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link  :to="{ name: 'images' }">
+        <v-list-item link :to="{ name: 'images' }">
           <v-list-item-action>
             <v-icon>mdi-eye</v-icon>
           </v-list-item-action>
