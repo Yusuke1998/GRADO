@@ -11,6 +11,127 @@ class PicPixReaderController extends Controller
         return view('inicio');
     }
 
+    public function allImages()
+    {
+        $images = Image::orderBy('created_at','desc')->get();
+        return $images;
+    }
+
+    public function findID($id)
+    {
+        $img = Image::findOrFail($id);
+        return $img;
+    }
+
+    public function action($id,$make)
+    {
+        $img = Image::findOrFail($id);
+        $nameImg = $img->name;
+
+        if (file_exists('imgModif/'.$nameImg)) {
+            $file = 'imgModif/'.$nameImg;
+        }else{
+            $file = 'imgOrigi/'.$nameImg;
+        }
+
+        $px = new \PixReader;
+        $px->setImage($file);
+
+        switch ($make) {
+            case 'reset':
+                if(copy('imgOrigi/'.$nameImg, 'imgModif/'.$nameImg)){
+                    return response([
+                        'status' => 'success'
+                    ], 200);
+                };
+                break;
+            case 'delete':
+                if(unlink('imgModif/'.$nameImg)){
+                    return response([
+                        'status' => 'success'
+                    ], 200);
+                };
+                break;
+            case 'clustery':
+                $px->Clustering();
+                break;
+            case 'spaceline':
+                $px->lineSpace();
+                break;
+            case 'squelet':
+                $px->squelettisation();
+                break;
+            case 'grayscale':
+                $px->image2gray();
+                break;
+            case 'backgroundBlack':
+                $px->paintPixel(16777215,000,000);
+                break;
+            case 'backgroundWhite':
+                $px->paintPixel(000,16777215,16777215);
+                break;
+            default:
+                break;
+        }
+
+        if ($px->saveImage($nameImg,'imgModif')) {
+            return response([
+                'status' => 'success'
+            ], 200);
+        }
+    }
+
+    public function save(Request $request)
+    {
+        if ($request->hasFile('img')) {
+            $file = $request->file('img');
+            $nameImg = $file->getClientOriginalName();
+            $file->move("imgOrigi/",$nameImg);
+
+            Image::create([
+                'name'  =>  $nameImg
+            ]);
+            
+            return response([
+                'status' => 'success'
+            ], 200);
+        }
+        return response([
+            'status' => 'warning'
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $img = Image::findOrFail($id);
+        if(file_exists('imgModif/'.$img->name)){unlink('imgModif/'.$img->name);}
+        if(file_exists('imgOrigi/'.$img->name)){unlink('imgOrigi/'.$img->name);}
+        $img->delete();
+
+        return response([
+            'status' => 'success'
+        ], 200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function picpixreader()
     {

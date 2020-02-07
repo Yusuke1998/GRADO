@@ -1,32 +1,55 @@
 <template>
 	<div class="my-12">
 		<v-container>
-			<v-layout>
-				<v-flex xs12>
-					<h4 class="text-center">Todas las Imagenes</h4>
-				</v-flex>
+			<v-layout v-if="images.length > 0">
+				<v-flex xs2 offset-xs10>
+	            	<v-select class="text-xs-right" label="Cambiar" v-bind:items="types" v-model="type" overflow></v-select>
+	          </v-flex>
 			</v-layout>
-
 			<v-layout>
 				<v-flex xs12>
 					<v-container>
-						<v-row 
-							align-content-xs="center" 
+						<v-row
 							no-gutters>
-					      <v-col
-					        v-for="n in 12" :key="n"
-					        cols="12"
-					        sm="4">
+					      <v-col v-if="images.length == 0"
+					      	cols="12">
 					        <v-card
 					        	class="pa-2 ma-2"
 					        	outlined
 					        	tile>
 					        	<v-card-title>
-					        		<p>Imagen {{n}}</p>
+					        		<p>No hay Imagenes</p>
+					        	</v-card-title>
+					        </v-card>
+					      </v-col>
+					      <v-col
+					      	v-else
+					        v-for="(image,idx) in images"
+					        :key="idx"
+					        cols="12"
+					        sm="4">
+					        <v-card
+					        	link :to="{ path: '/imagen/'+image.id }"
+					        	class="pa-2 ma-2"
+					        	outlined
+					        	tile>
+					        	<v-card-title>
+					        		<center>
+					        			<p>Imagen {{image.name}}</p>
+					        		</center>
 					        	</v-card-title>
 					        	<v-card-text>
-					         		<v-img></v-img>
+					        		<center>
+						         		<v-img 
+						         			:src="type+image.name"
+						         			width="50%"
+				                			height="50%">
+				                		</v-img>
+					        		</center>
 					         	</v-card-text>
+					         	<v-card-actions>
+		                			<v-btn @click="destroyImage(image.id)">Eliminar</v-btn>
+					         	</v-card-actions>
 					        </v-card>
 					      </v-col>
 					    </v-row>
@@ -40,21 +63,51 @@
 <script>
 
 export default {
-	mounted()
+	created()
 	{
-
+		this.allImages();
 	},
 
 	data()
 	{
 
 		return {
-
+			images:[],
+			types:[
+	          { text: 'Originales', value: '/imgOrigi/' },
+	          { text: 'Modificadas', value: '/imgModif/' },
+	        ],
+			type:'/imgOrigi/'
 		}
 	},
 
 	methods:{
 
+		async allImages() {
+			let response = await axios.get('/all-images');
+			this.images = response.data;
+		},
+
+		destroyImage(id)
+		{
+			let url = '/delete-image/'+id;
+			swal({
+				title: "Seguro de eliminar?",
+				text: "Una vez borrada, no la puedes recuperar!",
+				icon: "warning",
+				buttons: true,
+				dangerMode: true
+			}).then(yes => {
+				if (yes) {
+					axios.get(url)
+					.then(rsp=>{
+						this.$router.push({name:'home'})
+						utils.reload();
+					});
+				}
+			});
+		}
+		
 	}
 }
 

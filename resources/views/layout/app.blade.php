@@ -9,8 +9,6 @@
 	<title>Pic-Pix-Reader</title>
 </head>
 <body>
-	<div id="app">
-		@yield('content')
-	</div>
+	@yield('content')
 </body>
 </html>

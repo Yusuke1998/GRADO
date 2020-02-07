@@ -1,4 +1,4 @@
 @extends('layout.app')
 @section('content')
-	{{-- <picpixreader></picpixreader> --}}
+	<div id="app"></div>
 @stop
