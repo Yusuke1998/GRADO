@@ -88,23 +88,39 @@ export default {
 				let url = '/load-image'
 				let formData = new FormData();
 				formData.append('img', this.file);
-
-				this.makeRequest('POST', url, formData)
-				.then(data=>{
-					swal(
-						"Exelente!",
-						"Imagen cargada con Exito!",
-						"success"
-					);
-					utils.reload();
-				})
-				.catch(err=>{
-					swal(
-						"Error!",
-						"Ha ocurrido un problema!",
-						"warning"
-					);
-				});
+				this.$root.loading('Guardando', 'Se esta subiendo la imagen');
+	            setTimeout(() => {
+					this.makeRequest('POST', url, formData)
+					.then(data=>{
+						swal.close()
+						data = JSON.parse(data)
+						if (data.status == 'success')
+						{
+							swal(
+								"Exelente!",
+								"Imagen cargada con Exito!",
+								"success"
+							);
+						}
+						else
+						{
+							swal(
+								"Error!",
+								"No hay Imagen para cargar!",
+								"warning"
+							);
+						}
+						utils.reload();
+					})
+					.catch(err=>{
+						swal.close()
+						swal(
+							"Error!",
+							"Ha ocurrido un problema!",
+							"warning"
+						);
+					});
+	            }, 500);
 			}else{
 				swal(
 						"Imagen obligatoria!",

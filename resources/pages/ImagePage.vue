@@ -28,9 +28,9 @@
 		                <v-card-actions>
 		                	<v-btn :small="true" @click.once="applyAction('spaceline')">Separar</v-btn>
 		                	<v-btn :small="true" @click.once="applyAction('clustery')">Segmentar</v-btn>
-		                	<!-- <v-btn :small="true" @click.once="applyAction('grayscale')">Gris</v-btn>
+		                	<v-btn :small="true" @click.once="applyAction('grayscale')">Gris</v-btn>
 		                	<v-btn :small="true" @click.once="applyAction('backgroundBlack')">Negro</v-btn>
-		                	<v-btn :small="true" @click.once="applyAction('backgroundWhite')">Blanco</v-btn> -->
+		                	<v-btn :small="true" @click.once="applyAction('squelet')">Esqueletizar</v-btn>
 		            	</v-card-actions>
 		            </v-card>
 				</v-flex>
@@ -61,6 +61,7 @@
 		                <v-card-actions v-if="exist">
 		                	<v-btn :small="true" @click.once="applyAction('reset')">Reiniciar</v-btn>
 		                	<v-btn :small="true" @click.once="applyAction('delete')">Borrar</v-btn>
+		                	<v-btn :small="true" link :to="{ path: '/imagen/modificada/'+imagen.id }">Ver</v-btn>
 		            	</v-card-actions>
 		            </v-card>
 				</v-flex>
@@ -107,18 +108,37 @@ export default {
 		{
 			let id = this.imagen.id;
 			let url = '/action-image/'+id+'/'+action;
-			axios.get(url)
-			.then(rsp=>{
-				if (rsp.data.status == 'success')
-				{
-					swal(
-						"Exelente!",
-						"La accion se aplico correctamente!",
-						"success"
-					);
+			this.$root.loading('Procesando', 'Se estan aplicando una accion', 100000);
+	        setTimeout(() => {
+				axios.get(url)
+				.then(rsp=>{
+					if (rsp.data.status == 'success')
+					{
+						swal.close()
+						swal(
+							"Exelente!",
+							"La accion se aplico correctamente!",
+							"success"
+						);
+					}else{
+						swal.close()
+						swal(
+							"Error!",
+							"Ha ocurrido un problema!",
+							"warning"
+						);
+					}
 					utils.reload();
-				}
-			});
+				})
+				.catch(err=>{
+					swal.close()
+					swal(
+						"Error!",
+						"Ha ocurrido un problema!",
+						"warning"
+					);
+				});;
+			},500);
 		}
 	}
 }

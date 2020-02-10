@@ -32,5 +32,20 @@ new Vue({
         }
     }),
     router,
+    methods:{
+    	loading(name, content, time = 3000){
+            swal({
+                title:name,
+                text:content,
+                button:{
+                    text: "Ok!",
+                    closeModal: false,
+                },
+                icon:'/imgDefault/spin.gif',
+                closeOnClickOutside: false,
+                timer: time
+            })
+        }
+    },
     render: h=>h(App)
 }).$mount('#app');

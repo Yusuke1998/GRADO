@@ -74,11 +74,16 @@ class PicPixReaderController extends Controller
                 break;
         }
 
-        if ($px->saveImage($nameImg,'imgModif')) {
+        if ($px->saveImage($nameImg,'imgModif'))
+        {
             return response([
                 'status' => 'success'
             ], 200);
         }
+
+        return response([
+            'status' => 'warning'
+        ], 200);
     }
 
     public function save(Request $request)
@@ -86,12 +91,16 @@ class PicPixReaderController extends Controller
         if ($request->hasFile('img')) {
             $file = $request->file('img');
             $nameImg = $file->getClientOriginalName();
-            $file->move("imgOrigi/",$nameImg);
-
+            if(file_exists('imgOrigi/'.$nameImg))
+            {
+                unlink('imgOrigi/'.$nameImg);
+                $file->move("imgOrigi/",$nameImg);
+            }else{
+                $file->move("imgOrigi/",$nameImg);
+            }
             Image::create([
                 'name'  =>  $nameImg
             ]);
-            
             return response([
                 'status' => 'success'
             ], 200);
