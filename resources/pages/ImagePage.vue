@@ -108,7 +108,7 @@ export default {
 		{
 			let id = this.imagen.id;
 			let url = '/action-image/'+id+'/'+action;
-			this.$root.loading('Procesando', 'Se estan aplicando una accion', 100000);
+			this.$root.loading('Procesando', 'Se estan aplicando una accion', 500000);
 	        setTimeout(() => {
 				axios.get(url)
 				.then(rsp=>{
